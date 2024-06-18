@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"se-api/src/internal/config"
 	"se-api/src/internal/lib/common"
 	"se-api/src/internal/services"
 	test_lib "se-api/src/internal/tests/lib"
@@ -13,8 +14,17 @@ import (
 )
 
 func TestBuyCrypto(t *testing.T) {
+	// init
+	err := test_lib.Init()
+	if err != nil {
+		t.Fatalf("Failed to initialize: %v", err)
+	}
+
 	// truncate database
-	test_lib.TruncateAllTables()
+	err = test_lib.TruncateAllTables()
+	if err != nil {
+		t.Fatalf("Failed to truncate all tables: %v", err)
+	}
 
 	// test user id and jpy balance
 	testUserID := "test_user1"
@@ -24,14 +34,14 @@ func TestBuyCrypto(t *testing.T) {
 	userService := services.NewUserService()
 
 	// prepare test user
-	err := prepareTestUser(userService, testUserID, initialJPYBalance)
+	err = prepareTestUser(userService, testUserID, initialJPYBalance)
 	if err != nil {
 		t.Fatalf("Failed to prepare test user: %v", err)
 	}
 
 	// request and expected response
 	requestBody := `{"satoshi": 10000}`
-	expectedResponseBody := `{"satoshi_balance": 10000, "jpy_balance": 7000}`
+	expectedResponseBody := `{"jpy_balance": 7000,"satoshi_balance": 10000}`
 
 	// send post request and get response
 	resp, err := sendBuyCryptoRequest(testUserID, requestBody)
@@ -52,8 +62,12 @@ func TestBuyCrypto(t *testing.T) {
 	}
 
 	// check response
-	if strings.TrimSpace(actualResponseBody) != strings.TrimSpace(expectedResponseBody) {
-		t.Fatalf("Expected body %q, got %q", expectedResponseBody, actualResponseBody)
+	equal, err := test_lib.IsJSONEqual(actualResponseBody, expectedResponseBody)
+	if err != nil {
+		t.Fatalf("Failed to unmarshal json: %v", err)
+	}
+	if !equal {
+		t.Fatalf("Expected body %q, got %q", strings.TrimSpace(expectedResponseBody), strings.TrimSpace(actualResponseBody))
 	}
 }
 
@@ -79,7 +93,7 @@ func sendBuyCryptoRequest(userID, requestBody string) (*http.Response, error) {
 	// create a request
 	req, err := http.NewRequest(
 		"POST",
-		common.JoinWithBackendUrl("/buy_crypto"),
+		common.JoinPaths(config.AppConfig.BACKEND_URL, "/v1/buy_crypto"),
 		bytes.NewBufferString(requestBody),
 	)
 	if err != nil {

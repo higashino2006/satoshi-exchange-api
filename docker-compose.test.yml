@@ -23,6 +23,7 @@ services:
       - db
     environment:
       TEST_MODE: 1
+      ENV_FILE_PATH: /se-api/.env
       DB_HOST: db
       DB_DATABASE: satoshi_exchange
       DB_USERNAME: root

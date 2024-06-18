@@ -32,5 +32,5 @@ make unit_test TEST_PATH=/lib/common_test.go
 
 ```
 make up_test
-make integration_test TEST_PATH=/lib/common_test.go
+make integration_test TEST_PATH=/controllers/trade_controller_test.go
 ```
