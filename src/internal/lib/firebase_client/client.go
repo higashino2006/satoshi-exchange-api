@@ -3,6 +3,7 @@ package firebase_client
 import (
 	"context"
 	"log"
+	"se-api/src/internal/config"
 
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
@@ -11,6 +12,10 @@ import (
 var authClient *auth.Client
 
 func Init() error {
+	if config.AppConfig.TEST_MODE {
+		return nil
+	}
+
 	// Initialize default app
 	app, err := firebase.NewApp(context.Background(), nil)
 	if err != nil {

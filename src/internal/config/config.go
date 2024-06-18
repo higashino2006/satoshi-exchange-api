@@ -15,12 +15,18 @@ type Config struct {
 	DB_USERNAME           string
 	DB_PASSWORD           string
 	MIGRATION_FOLDER_PATH string
+	TEST_MODE             bool
 }
 
 var AppConfig Config
 
 func Init() error {
-	err := godotenv.Load(".env")
+	isTestMode := os.Getenv("TEST_MODE") == "1"
+	envPath := ".env"
+	if isTestMode {
+		envPath = os.Getenv("ENV_FILE_PATH")
+	}
+	err := godotenv.Load(envPath)
 	if err != nil {
 		log.Printf("Error loading .env file: %v", err)
 		return err
@@ -34,6 +40,7 @@ func Init() error {
 		DB_USERNAME:           os.Getenv("DB_USERNAME"),
 		DB_PASSWORD:           os.Getenv("DB_PASSWORD"),
 		MIGRATION_FOLDER_PATH: os.Getenv("MIGRATION_FOLDER_PATH"),
+		TEST_MODE:             os.Getenv("TEST_MODE") == "1",
 	}
 
 	return nil
