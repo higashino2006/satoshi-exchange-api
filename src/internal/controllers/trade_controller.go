@@ -29,11 +29,12 @@ func (tc *TradeController) BuyCrypto(c *gin.Context) {
 		return
 	}
 
+	satoshiToBuy := common.RoundDownFrom4DecimalPlaces(jsonBody.Satoshi)
 	uid := common.GetUserID(c)
 	userService := services.NewUserService()
 
 	// check if the user has enough jpy
-	requiredJPY := common.ConvertSatoshiToJPY(jsonBody.Satoshi)
+	requiredJPY := common.ConvertSatoshiToJPY(satoshiToBuy)
 	user, err := userService.GetUserByID(uid)
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
@@ -53,10 +54,10 @@ func (tc *TradeController) BuyCrypto(c *gin.Context) {
 		UserID:  user.ID,
 		Type:    "buy",
 		JPY:     requiredJPY,
-		Satoshi: jsonBody.Satoshi,
+		Satoshi: satoshiToBuy,
 	}
 	newJPYBalance := user.JPYBalance - requiredJPY
-	newSatoshiBalance := user.SatoshiBalance + jsonBody.Satoshi
+	newSatoshiBalance := user.SatoshiBalance + satoshiToBuy
 	err = txService.CreateTradeRecordAndUpdateBalance(
 		tradeRecord,
 		uid,
@@ -86,6 +87,7 @@ func (tc *TradeController) SellCrypto(c *gin.Context) {
 		return
 	}
 
+	satoshiToSell := common.RoundDownFrom4DecimalPlaces(jsonBody.Satoshi)
 	uid := common.GetUserID(c)
 	userService := services.NewUserService()
 
@@ -95,7 +97,7 @@ func (tc *TradeController) SellCrypto(c *gin.Context) {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		log.Fatalf("Error getting user by id: %v", err)
 	}
-	if user.SatoshiBalance < jsonBody.Satoshi {
+	if user.SatoshiBalance < satoshiToSell {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": "not enough satoshi",
 		})
@@ -105,15 +107,15 @@ func (tc *TradeController) SellCrypto(c *gin.Context) {
 	txService := services.NewTxService()
 
 	// create trade record and update balance
-	JPYObtained := common.ConvertSatoshiToJPY(jsonBody.Satoshi)
+	JPYObtained := common.ConvertSatoshiToJPY(satoshiToSell)
 	tradeRecord := &models.TradeRecord{
 		UserID:  user.ID,
 		Type:    "sell",
 		JPY:     JPYObtained,
-		Satoshi: jsonBody.Satoshi,
+		Satoshi: satoshiToSell,
 	}
 	newJPYBalance := user.JPYBalance + JPYObtained
-	newSatoshiBalance := user.SatoshiBalance - jsonBody.Satoshi
+	newSatoshiBalance := user.SatoshiBalance - satoshiToSell
 	err = txService.CreateTradeRecordAndUpdateBalance(
 		tradeRecord,
 		uid,
