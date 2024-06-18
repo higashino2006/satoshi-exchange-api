@@ -14,9 +14,9 @@ func GetUserID(c *gin.Context) string {
 	return fmt.Sprint(userId)
 }
 
-func RoundDownFrom4DecimalPlaces(value float64) float64 {
-	truncated := math.Trunc(value * 1000)
-	return truncated / 1000
+func RoundDownFrom4DecimalPlaces(value float32) float32 {
+	truncated := math.Trunc(float64(value * 1000))
+	return float32(truncated / 1000)
 }
 
 func ConvertSatoshiToJPY(Satoshi float32) float32 {
