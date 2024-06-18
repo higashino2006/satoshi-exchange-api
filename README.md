@@ -40,6 +40,6 @@ TEST_PATHに/tests/unit以下のパスを指定。
 
 例
 ```
-make up_test
+make up_test # テスト用のdocker composeの立ち上げ
 make integration_test TEST_PATH=/controllers/trade_controller_test.go
 ```
