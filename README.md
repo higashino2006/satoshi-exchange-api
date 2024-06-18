@@ -3,7 +3,7 @@
 取引所のサンプルです。  
 手持ちのJPYとSatoshiを売買します。
 
-具体的な挙動の例は(./docs/behavior_videos)参照
+具体的な挙動の例は[docs/behavior_videos](./docs/behavior_videos)参照
 
 ## セットアップ
 
