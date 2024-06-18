@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"math"
+	"se-api/src/internal/config"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,10 @@ func JoinPaths(baseURL, subPath string) string {
 	baseURL = strings.TrimSuffix(baseURL, "/")
 	subPath = strings.TrimPrefix(subPath, "/")
 	return fmt.Sprintf("%s/%s", baseURL, subPath)
+}
+
+func JoinWithBackendUrl(subPath string) string {
+	return JoinPaths(config.AppConfig.BACKEND_URL, subPath)
 }
 
 func ConvertSatoshiToJPY(Satoshi float32) float32 {

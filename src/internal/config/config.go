@@ -15,6 +15,8 @@ type Config struct {
 	DB_USERNAME           string
 	DB_PASSWORD           string
 	MIGRATION_FOLDER_PATH string
+	TEST_MODE             bool
+	TEST_BACKEND_URL      string
 }
 
 var AppConfig Config
@@ -34,6 +36,8 @@ func Init() error {
 		DB_USERNAME:           os.Getenv("DB_USERNAME"),
 		DB_PASSWORD:           os.Getenv("DB_PASSWORD"),
 		MIGRATION_FOLDER_PATH: os.Getenv("MIGRATION_FOLDER_PATH"),
+		TEST_MODE:             os.Getenv("TEST_MODE") == "1",
+		TEST_BACKEND_URL:      os.Getenv("TEST_BACKEND_URL"),
 	}
 
 	return nil
