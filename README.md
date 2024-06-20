@@ -29,7 +29,7 @@ make up
 
 TEST_PATH is paths under /tests/unit
 
-例
+example
 ```
 make unit_test TEST_PATH=/lib/common_test.go
 ```
@@ -39,7 +39,7 @@ make unit_test TEST_PATH=/lib/common_test.go
 TEST_PATH is paths under /tests/integration    
 It is necessary to launch docker compose for testing in advance.
 
-例
+example
 ```
 make up_test # launch docker compose for testing
 make integration_test TEST_PATH=/controllers/trade_controller_test.go
