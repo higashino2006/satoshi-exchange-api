@@ -1,45 +1,46 @@
 # Satoshi Exchange API
 
-取引所のサンプルです。  
-手持ちのJPYとSatoshiを売買します。
+The Sample of Crypto Exchange
 
-具体的な挙動の例は[docs/behavior_videos](./docs/behavior_videos)参照
+[Behavior Videos](./docs/behavior_videos)
 
-## セットアップ
+## Setup
 
 ```
-cp .env.example .env # 初回だけ
+cp .env.example .env # Only at the beginning.
 make up
 ```
 
-## 実装項目
+## Feature
 
-- エラーハンドリング
-- モデル,コントローラー,サービスなど要素の分解
-  - [src/internal](./src/internal)参照
-- トランザクション/ロールバック
-  - [src/internal/services/tx_service.go](./src/internal/services/tx_service.go)参照
-- 単体テスト
-  - [src/internal/tests/unit](./src/internal/tests/unit)参照
-- 統合テスト(一部APIのみ)
-  - [src/internal/tests/integration](./src/internal/tests/integration)参照
+- Authentication(Firebase)
+- REST API
+- MVC Model
+  - [src/internal](./src/internal)
+- Error Handling
+- DB Transaction
+  - [src/internal/services/tx_service.go](./src/internal/services/tx_service.go)
+- Unit Test
+  - [src/internal/tests/unit](./src/internal/tests/unit)
+- Integration Test(Not all APIs, but some)
+  - [src/internal/tests/integration](./src/internal/tests/integration)
 
-### 単体テスト
+### Unit Test
 
-TEST_PATHに/tests/unit以下のパスを指定
+TEST_PATH is paths under /tests/unit
 
 例
 ```
 make unit_test TEST_PATH=/lib/common_test.go
 ```
 
-### 統合テスト
+### Integration Test
 
-TEST_PATHに/tests/unit以下のパスを指定。  
-事前にテスト用のdocker composeを立ち上げる必要がある。
+TEST_PATH is paths under /tests/integration    
+It is necessary to launch docker compose for testing in advance.
 
 例
 ```
-make up_test # テスト用のdocker composeの立ち上げ
+make up_test # launch docker compose for testing
 make integration_test TEST_PATH=/controllers/trade_controller_test.go
 ```
