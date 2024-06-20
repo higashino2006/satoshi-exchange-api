@@ -1,7 +1,7 @@
-# フロントエンドから見た挙動(一部)
+# Behavior from Frontend (example)
 
-新規登録  
+Signup  
 ![Demo](./signup.gif)
 
-コインの購入/売却  
+Buy and Sell Crypto  
 ![Demo](./trade.gif)
