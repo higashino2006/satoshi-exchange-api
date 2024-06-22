@@ -2,8 +2,6 @@
 
 The Sample of Crypto Exchange
 
-[Behavior Videos](./docs/behavior_videos)
-
 ## Setup
 
 ```
